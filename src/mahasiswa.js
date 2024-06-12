@@ -7,6 +7,7 @@ import { Add as AddIcon, Close as CloseIcon, Edit as EditIcon, Delete as DeleteI
 
 function Mahasiswa() {
   const [mahasiswa, setMahasiswa] = useState([]);
+  const [token, setToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,7 +31,10 @@ function Mahasiswa() {
 
   const handleDeleteData = (nim) => {
     fetch(`http://localhost:5000/api/mahasiswa/${nim}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization' : `Bearer ${token}`
+      }
     })
       .then(response => response.json())
       .then(() => {
@@ -65,7 +69,8 @@ function Mahasiswa() {
     fetch(url, {
       method: method,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       body: JSON.stringify(formData)
     })
@@ -82,7 +87,15 @@ function Mahasiswa() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/mahasiswa')
+    // Fetch token logic or wherever you get the token
+    const fetchedToken = localStorage.getItem('token');
+    setToken(fetchedToken);
+
+    fetch('http://localhost:5000/api/mahasiswa', {
+      headers : {
+        'Authorization' : `Bearer ${fetchedToken}`
+      }
+    })
       .then(response => response.json())
       .then(data => {
         setMahasiswa(data);
