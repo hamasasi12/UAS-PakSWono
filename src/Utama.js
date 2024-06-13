@@ -1,33 +1,32 @@
+import React, { useState, useEffect } from 'react';
+import { CssBaseline, Box, AppBar, Toolbar, Typography, IconButton, Badge, Menu, MenuItem, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Menu as MenuIcon, Notifications as NotificationsIcon, AccountCircle, ChevronLeft as ChevronLeftIcon, Dashboard as DashboardIcon, School as SchoolIcon } from '@mui/icons-material';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+
 import Mahasiswa from './mahasiswa';
-import React from 'react';
-import {
-  CssBaseline, Box, AppBar, Toolbar, Typography, IconButton, Badge, Menu,
-  MenuItem, Drawer, List, ListItem, ListItemIcon, ListItemText
-} from '@mui/material';
-import {
-  Menu as MenuIcon, Notifications as NotificationsIcon, AccountCircle,
-  ChevronLeft as ChevronLeftIcon, Dashboard as DashboardIcon, BarChart as
-  BarChartIcon, School as SchoolIcon
-} from '@mui/icons-material';
-import { useState,useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import DataAsset from './dataAsset';
+import Tindaklanjut from './tindaklanjut';
+import RequestUser from './requestuser';
+import PermintaanPerbaikan from './permintaanPerbaikan';
+import PermintaanMasuk from './permintaanmasuk';
 
 function App() {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-        navigate('/login');
+      navigate('/login');
     }
   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login')
-  }
+    navigate('/login');
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -49,10 +48,9 @@ function App() {
     <>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="fixed">
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="open drawer"
-              onClick={handleDrawerOpen} sx={{ mr: 2 }}>
+            <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} sx={{ mr: 2 }}>
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
@@ -75,7 +73,7 @@ function App() {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
@@ -83,8 +81,13 @@ function App() {
           variant="permanent"
           open={open}
           sx={{
-            '& .MuiDrawer-paper': { position: 'revert-layer', whiteSpace: 'nowrap', width: 240, transition: 'width 0.3s', boxSizing: 'border-box' },
-            '& .MuiDrawer-paperClose': { overflowX: 'hidden', transition: 'width 0.3s', width: 0 },
+            '& .MuiDrawer-paper': {
+              position: 'relative',
+              whiteSpace: 'nowrap',
+              width: open ? 240 : 0,
+              transition: 'width 0.3s',
+              boxSizing: 'border-box',
+            },
           }}
         >
           <Toolbar>
@@ -94,7 +97,6 @@ function App() {
           </Toolbar>
           <List>
             <ListItem button component={Link} to="/dashboard">
-
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
@@ -102,12 +104,47 @@ function App() {
             </ListItem>
 
             <ListItem button component={Link} to="/mahasiswa">
-              
               <ListItemIcon>
-                <DashboardIcon />
+                <SchoolIcon />
               </ListItemIcon>
-              <ListItemText primary="mahasiswa" />
+              <ListItemText primary="Mahasiswa" />
             </ListItem>
+
+            <ListItem button component={Link} to="/dataAsset">
+              <ListItemIcon>
+                <SchoolIcon />
+              </ListItemIcon>
+              <ListItemText primary="Data Asset" />
+            </ListItem>
+
+            <ListItem button component={Link} to="/tindaklanjut">
+              <ListItemIcon>
+                <SchoolIcon />
+              </ListItemIcon>
+              <ListItemText primary="Tindak Lanjut" />
+            </ListItem>
+
+            <ListItem button component={Link} to="/requestuser">
+              <ListItemIcon>
+                <SchoolIcon />
+              </ListItemIcon>
+              <ListItemText primary="Request User" />
+            </ListItem>
+
+            <ListItem button component={Link} to="/permintaanPerbaikan">
+              <ListItemIcon>
+                <SchoolIcon />
+              </ListItemIcon>
+              <ListItemText primary="Permintaan Perbaikan" />
+            </ListItem>
+
+            <ListItem button component={Link} to="/permintaanmasuk">
+              <ListItemIcon>
+                <SchoolIcon />
+              </ListItemIcon>
+              <ListItemText primary="Permintaan Masuk" />
+            </ListItem>
+
           </List>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -121,7 +158,12 @@ function App() {
                 </Typography>
               </div>
             } />
-            <Route path='/mahasiswa' element={<Mahasiswa/>}/>
+            <Route path="/mahasiswa" element={<Mahasiswa />} />
+            <Route path="/dataAsset" element={<DataAsset />} />
+            <Route path="/tindaklanjut" element={<Tindaklanjut />} />
+            <Route path="/requestuser" element={<RequestUser />} />
+            <Route path="/permintaanPerbaikan" element={<PermintaanPerbaikan />} />
+            <Route path="/permintaanmasuk" element={<PermintaanMasuk />} />
           </Routes>
         </Box>
       </Box>
